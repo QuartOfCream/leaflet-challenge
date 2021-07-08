@@ -65,11 +65,11 @@ d3.json(earthquakeURL, function(earthquakeData) {
         //create colors for the different circles
         function Color(magnitude) {
             if (magnitude > 5) {
-                return 'red'
+                return 'darkred'
             } else if (magnitude > 4) {
-                return 'darkorange'
+                return 'orange'
             } else if (magnitude > 3) {
-                return 'tan'
+                return 'darkyellow'
             } else if (magnitude > 2) {
                 return 'yellow'
             } else if (magnitude > 1) {
