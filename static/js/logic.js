@@ -56,12 +56,27 @@ d3.json(earthquakeURL, function(earthquakeData) {
     function styleInfo(feature) {
         return {
           opacity: 1,
-          fillOpacity: 1,
+          fillOpacity: .7,
           fillColor: chooseColor(feature.properties.mag),
           color: "#e31bbe",
-          radius: markerSize(feature.properties.mag),
           stroke: true,
-          weight: 0.5
+          weight: .4
+        };
+        //create colors for the different circles
+        function Color(magnitude) {
+            if (magnitude > 5) {
+                return 'red'
+            } else if (magnitude > 4) {
+                return 'darkorange'
+            } else if (magnitude > 3) {
+                return 'tan'
+            } else if (magnitude > 2) {
+                return 'yellow'
+            } else if (magnitude > 1) {
+                return 'darkgreen'
+            } else {
+                return 'lightgreen'
+            }
         };
         }
 
