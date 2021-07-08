@@ -25,11 +25,7 @@ var lightmap = L.map("map", {
     accessToken: API_KEY
   }).addTo(lightmap);
 
-  var lightmap = L.map("map", {
-    center: USCoords,
-    zoom: mapZoomLevel
-  });
-  L.sateliteLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
+var satellitemap = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v11/tiles/{z}/{x}/{y}?access_token={accessToken}", {
     attribution: "© <a href='https://www.mapbox.com/about/maps/'>Mapbox</a> © <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> <strong><a href='https://www.mapbox.com/map-feedback/' target='_blank'>Improve this map</a></strong>",
     tileSize: 512,
     maxZoom: 18,
@@ -40,7 +36,8 @@ var lightmap = L.map("map", {
 
 //create the base layers
 var baseLayers = {
-    "Light": lightmap
+    "Light": lightmap,
+    "Satelitte": satellitemap
 };
 
 //create top layers
@@ -50,7 +47,7 @@ var topLayers = {
 
 //create the map where I pass through the two layers to load in on page load
 var myMap = L.map("map", {
-    center: [45.0012, 32.0076],
+    center: [45, 32],
     zoom: 2,
     layers: [lightmap, earthquakes]
 });
@@ -61,7 +58,25 @@ function markerSize(magnitude) {
 };
 
 //create layer control and add it to the map
-L.control.layers(baseLayers, topLayers).addTo(myMap);
+//L.control.layers(baseLayers, topLayers).addTo(myMap);
+
+L.control.layers(baseLayers, topLayers, {
+    collapsed: false
+  }).addTo(myMap);
+
+//read the earthquake data and then once it's read, send it to featuresEQ
+d3.json(earthquakeURL, function(earthquakeData) {
+    FeaturesEQ(earthquakeData.features);
+    console.log(earthquakeData.features)
+  });
+
+  function featuresEQ(earthquakeData) {
+//making a popup for each circle
+    function onEachFeature(feature, layer) {
+      layer.bindPopup("<h3>" + feature.properties.place +
+        "</h3><hr><p>" + new Date(feature.properties.time) + "</p>");
+    }
+}
 
 //read json with d3.json
 d3.json(earthquakeURL, function(earthquakeData) {
@@ -92,13 +107,8 @@ d3.json(earthquakeURL, function(earthquakeData) {
             }
         };
         }
-
+        return div;
     }
-    
-    
-
-
-
 
 )
 
